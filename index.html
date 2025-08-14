@@ -426,6 +426,199 @@
                 max-width: 400px;
             }
         }
+
+        /* Winners Menu Styles */
+        .winners-menu {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+            max-width: 400px;
+        }
+
+        .winners-toggle {
+            background: linear-gradient(135deg, #ff6b6b, #ffa500);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 15px 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+        }
+
+        .winners-toggle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        }
+
+        .winners-badge {
+            background: white;
+            color: #ff6b6b;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .winners-panel {
+            position: absolute;
+            bottom: 70px;
+            left: 0;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 380px;
+            max-height: 500px;
+            overflow-y: auto;
+            display: none;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .winners-panel.active {
+            display: block;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .winners-panel-header {
+            background: linear-gradient(135deg, #ff6b6b, #ffa500);
+            color: white;
+            padding: 20px;
+            border-radius: 20px 20px 0 0;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .winners-panel-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .winners-list {
+            padding: 15px;
+        }
+
+        .winner-entry {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.05), rgba(255, 165, 0, 0.05));
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .winner-entry:hover {
+            border-color: #ff6b6b;
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(255, 107, 107, 0.2);
+        }
+
+        .winner-entry-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .winner-entry-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #ff6b6b;
+        }
+
+        .winner-entry-info {
+            flex: 1;
+        }
+
+        .winner-entry-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .winner-entry-round {
+            color: #ff6b6b;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .winner-entry-votes {
+            background: #ff6b6b;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .winner-entry-details {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .winner-entry-competitors {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .competitor-name {
+            display: inline-block;
+            background: rgba(255, 107, 107, 0.1);
+            padding: 2px 8px;
+            border-radius: 8px;
+            margin: 2px;
+        }
+
+        .winner-entry-time {
+            font-size: 0.8rem;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        .no-winners {
+            text-align: center;
+            padding: 30px;
+            color: #999;
+        }
+
+        @media (max-width: 768px) {
+            .winners-menu {
+                left: 10px;
+                bottom: 10px;
+            }
+            
+            .winners-panel {
+                width: calc(100vw - 40px);
+                max-width: 380px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -458,6 +651,24 @@
             <button class="next-round-btn" onclick="startNewRound()">Start Next Round →</button>
             <div class="history" id="history">
                 <h3>🏅 Previous Winners</h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- Winners Menu -->
+    <div class="winners-menu">
+        <button class="winners-toggle" onclick="toggleWinnersMenu()">
+            🏆 Winners
+            <span class="winners-badge" id="winners-count">0</span>
+        </button>
+        <div class="winners-panel" id="winners-panel">
+            <div class="winners-panel-header">
+                <div class="winners-panel-title">
+                    🏆 Hall of Champions
+                </div>
+            </div>
+            <div class="winners-list" id="winners-list">
+                <div class="no-winners">No winners yet. Cast your votes!</div>
             </div>
         </div>
     </div>
@@ -622,6 +833,21 @@
         let winners = [];
         let hasVoted = false;
         let currentRoundRef = null;
+        let allRoundData = []; // Store complete round data
+
+        function toggleWinnersMenu() {
+            const panel = document.getElementById('winners-panel');
+            panel.classList.toggle('active');
+        }
+
+        // Close winners menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const menu = document.querySelector('.winners-menu');
+            const panel = document.getElementById('winners-panel');
+            if (!menu.contains(event.target) && panel.classList.contains('active')) {
+                panel.classList.remove('active');
+            }
+        });
 
         function getRandomAnimals() {
             // Reset used animals if we've gone through all
@@ -721,7 +947,18 @@
             const winner = currentAnimals[winnerIndex];
             winner.votes = maxVotes;
             winner.round = roundNumber;
+            
+            // Store complete round data
+            const roundData = {
+                round: roundNumber,
+                winner: winner,
+                competitors: currentAnimals,
+                allVotes: {...votes},
+                timestamp: new Date().toLocaleString()
+            };
+            
             winners.push(winner);
+            allRoundData.push(roundData);
             
             // Save winner to Firebase
             if (currentRoundRef) {
@@ -737,6 +974,9 @@
                     timestamp: Date.now()
                 });
             }
+            
+            // Update winners menu
+            updateWinnersMenu();
             
             // Show results
             showResults(winner);
@@ -770,6 +1010,64 @@
                     <span class="history-round">Round ${winner.round} - ${winner.votes} votes</span>
                 `;
                 historyContainer.appendChild(item);
+            });
+        }
+
+        function updateWinnersMenu() {
+            // Update badge count
+            document.getElementById('winners-count').textContent = allRoundData.length;
+            
+            // Update winners list
+            const listContainer = document.getElementById('winners-list');
+            
+            if (allRoundData.length === 0) {
+                listContainer.innerHTML = '<div class="no-winners">No winners yet. Cast your votes!</div>';
+                return;
+            }
+            
+            listContainer.innerHTML = '';
+            
+            // Show all rounds in reverse order (most recent first)
+            allRoundData.slice().reverse().forEach(roundData => {
+                const entry = document.createElement('div');
+                entry.className = 'winner-entry';
+                
+                // Get competitor names (excluding winner)
+                const competitorNames = roundData.competitors
+                    .filter(animal => animal.name !== roundData.winner.name)
+                    .map(animal => `${animal.name} (${roundData.allVotes[roundData.competitors.indexOf(animal)] || 0} votes)`)
+                    .join(', ');
+                
+                // Calculate total votes
+                const totalVotes = Object.values(roundData.allVotes).reduce((sum, v) => sum + (v || 0), 0);
+                
+                entry.innerHTML = `
+                    <div class="winner-entry-header">
+                        <img src="${roundData.winner.image}" alt="${roundData.winner.name}" class="winner-entry-image">
+                        <div class="winner-entry-info">
+                            <div class="winner-entry-name">${roundData.winner.name}</div>
+                            <div class="winner-entry-round">Round ${roundData.round}</div>
+                        </div>
+                        <div class="winner-entry-votes">${roundData.winner.votes} votes</div>
+                    </div>
+                    <div class="winner-entry-details">
+                        <div class="winner-entry-competitors">
+                            <strong>Competed against:</strong><br>
+                            ${roundData.competitors
+                                .filter(animal => animal.name !== roundData.winner.name)
+                                .map(animal => {
+                                    const animalIndex = roundData.competitors.indexOf(animal);
+                                    const animalVotes = roundData.allVotes[animalIndex] || 0;
+                                    return `<span class="competitor-name">${animal.name} (${animalVotes})</span>`;
+                                }).join('')}
+                        </div>
+                        <div class="winner-entry-time">
+                            Total votes this round: ${totalVotes} • ${roundData.timestamp}
+                        </div>
+                    </div>
+                `;
+                
+                listContainer.appendChild(entry);
             });
         }
 
