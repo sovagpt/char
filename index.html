@@ -441,15 +441,16 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
     <script>
-        // Firebase configuration - REPLACE WITH YOUR CONFIG
+        // Firebase configuration
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
-            databaseURL: "YOUR_DATABASE_URL",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
+            apiKey: "AIzaSyCzcVwv8qs3eUny79eLIsqPu3cyybbDnuA",
+            authDomain: "animal-voting.firebaseapp.com",
+            databaseURL: "https://animal-voting-default-rtdb.firebaseio.com",
+            projectId: "animal-voting",
+            storageBucket: "animal-voting.firebasestorage.app",
+            messagingSenderId: "606364151440",
+            appId: "1:606364151440:web:ac16809e27f242e77fb215",
+            measurementId: "G-WXCXYQH30F"
         };
 
         // Initialize Firebase
@@ -763,12 +764,8 @@
 
         // Initialize first round
         window.onload = function() {
-            // Check if Firebase is configured
-            if (firebaseConfig.apiKey === "YOUR_API_KEY") {
-                console.log("Please configure Firebase with your credentials!");
-                // Continue anyway for demo purposes
-            }
-            
+            // Firebase is now configured with your credentials!
+            console.log("Firebase connected successfully!");
             startNewRound();
         };
     </script>
