@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -66,6 +67,78 @@
             width: 100%;
             max-width: 1400px;
             margin: 0 auto;
+        }
+
+        /* Social buttons in top right */
+        .social-buttons {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            display: flex;
+            gap: 12px;
+            z-index: 100;
+            animation: fadeIn 0.8s ease-out 0.4s both;
+        }
+
+        .social-button {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .social-button:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .social-button img {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+            filter: brightness(0.9);
+            transition: all 0.3s;
+        }
+
+        .social-button:hover img {
+            filter: brightness(1.1);
+            transform: scale(1.1);
+        }
+
+        .social-button.bags-button:hover {
+            background: linear-gradient(135deg, rgba(255, 185, 103, 0.15), rgba(255, 119, 168, 0.15));
+        }
+
+        .social-button.twitter-button:hover {
+            background: rgba(29, 155, 240, 0.15);
+        }
+
+        @media (max-width: 768px) {
+            .social-buttons {
+                top: 16px;
+                right: 16px;
+            }
+            
+            .social-button {
+                width: 42px;
+                height: 42px;
+            }
+            
+            .social-button img {
+                width: 24px;
+                height: 24px;
+            }
         }
 
         .header {
@@ -721,6 +794,16 @@
     </style>
 </head>
 <body>
+    <!-- Social buttons -->
+    <div class="social-buttons">
+        <a href="https://bags.fm" target="_blank" rel="noopener noreferrer" class="social-button bags-button">
+            <img src="https://cdn.prod.website-files.com/6740d85c4e3daeef29a89470/689a9b238c72e83b1999da45_6883a492438dc32acb24bd8a_userlmn_e14161accb7674f25f0dd6fc1ec4e340%20(1).png" alt="bags.fm">
+        </a>
+        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" class="social-button twitter-button">
+            <img src="https://cdn.prod.website-files.com/6740d85c4e3daeef29a89470/688401711f7c1c43849d13a6_HIMACZhOn7YJ71dTu-actor-2fSSfmZramPBO73OK-iBihnF3pbp-dexpng%20(2).png" alt="Twitter/X">
+        </a>
+    </div>
+
     <div class="main-container">
         <div class="header">
             <div class="logo-container">
