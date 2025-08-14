@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Charity Voting Platform</title>
+    <title>Best Friends Animal Sponsorship Voting</title>
     <style>
         * {
             margin: 0;
@@ -14,7 +14,7 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
             min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #ff6b6b 0%, #ffa500 50%, #ffec8b 100%);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -32,36 +32,51 @@
         h1 {
             font-size: 3rem;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .paw-icon {
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
         .tagline {
-            font-size: 1.2rem;
-            opacity: 0.9;
+            font-size: 1.3rem;
+            opacity: 0.95;
+            font-weight: 500;
         }
 
         .timer-container {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(15px);
             border-radius: 50px;
-            padding: 15px 30px;
+            padding: 20px 40px;
             margin-bottom: 40px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
             animation: fadeIn 1s ease-out 0.3s both;
+            border: 2px solid rgba(255,255,255,0.4);
         }
 
         .timer {
             color: white;
-            font-size: 2rem;
+            font-size: 2.5rem;
             font-weight: bold;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
         }
 
         .timer-label {
-            font-size: 1rem;
-            opacity: 0.9;
+            font-size: 1.1rem;
+            opacity: 0.95;
         }
 
         .cards-container {
@@ -73,30 +88,28 @@
             perspective: 1000px;
         }
 
-        .charity-card {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 30px;
-            width: 300px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        .animal-card {
+            background: white;
+            border-radius: 25px;
+            overflow: hidden;
+            width: 350px;
+            box-shadow: 0 25px 70px rgba(0,0,0,0.35);
             cursor: pointer;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             animation: float 6s ease-in-out infinite;
             transform-style: preserve-3d;
+            position: relative;
         }
 
-        .charity-card:nth-child(1) {
-            animation-delay: 0s;
+        .animal-card:nth-child(1) {
             animation: float 6s ease-in-out infinite, fadeInUp 0.5s ease-out 0.1s both;
         }
 
-        .charity-card:nth-child(2) {
-            animation-delay: 2s;
+        .animal-card:nth-child(2) {
             animation: float 6s ease-in-out infinite 2s, fadeInUp 0.5s ease-out 0.3s both;
         }
 
-        .charity-card:nth-child(3) {
-            animation-delay: 4s;
+        .animal-card:nth-child(3) {
             animation: float 6s ease-in-out infinite 4s, fadeInUp 0.5s ease-out 0.5s both;
         }
 
@@ -136,162 +149,240 @@
 
         @keyframes pulse {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+            50% { transform: scale(1.03); }
         }
 
-        .charity-card:hover {
+        .animal-card:hover {
             transform: translateY(-15px) scale(1.05);
-            box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+            box-shadow: 0 35px 90px rgba(0,0,0,0.45);
         }
 
-        .charity-card.voted {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
+        .animal-card.voted {
             transform: translateY(-20px) scale(1.08);
             animation: pulse 2s ease-in-out infinite;
+            box-shadow: 0 0 0 5px rgba(255, 107, 107, 0.5);
         }
 
-        .charity-icon {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            display: block;
-            text-align: center;
+        .animal-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: transform 0.3s;
         }
 
-        .charity-name {
-            font-size: 1.5rem;
+        .animal-card:hover .animal-image {
+            transform: scale(1.1);
+        }
+
+        .animal-content {
+            padding: 25px;
+        }
+
+        .animal-type-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff6b6b, #ffa500);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .animal-name {
+            font-size: 2rem;
             font-weight: bold;
             margin-bottom: 15px;
             color: #333;
         }
 
-        .voted .charity-name {
-            color: white;
-        }
-
-        .charity-description {
+        .animal-description {
             color: #666;
             line-height: 1.6;
             margin-bottom: 20px;
+            height: 80px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
         }
 
-        .voted .charity-description {
-            color: rgba(255,255,255,0.9);
+        .vote-section {
+            border-top: 2px solid #f0f0f0;
+            padding-top: 20px;
         }
 
         .vote-count {
-            background: rgba(102, 126, 234, 0.1);
-            border-radius: 10px;
-            padding: 10px;
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(255, 165, 0, 0.1));
+            border-radius: 15px;
+            padding: 15px;
             text-align: center;
             font-weight: bold;
-            color: #667eea;
+            color: #ff6b6b;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
             transition: all 0.3s;
         }
 
         .voted .vote-count {
-            background: rgba(255,255,255,0.2);
+            background: linear-gradient(135deg, #ff6b6b, #ffa500);
             color: white;
+            transform: scale(1.05);
         }
 
         .vote-button {
             width: 100%;
-            padding: 12px;
-            margin-top: 15px;
+            padding: 15px;
             border: none;
-            border-radius: 10px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 15px;
+            background: linear-gradient(135deg, #ff6b6b, #ffa500);
             color: white;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .vote-button:hover {
             transform: scale(1.05);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
         }
 
         .voted .vote-button {
-            background: white;
-            color: #667eea;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+        }
+
+        .voted .vote-button::after {
+            content: " ✓";
         }
 
         .results-container {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 30px;
-            max-width: 600px;
+            background: white;
+            border-radius: 25px;
+            padding: 40px;
+            max-width: 700px;
             width: 100%;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 25px 70px rgba(0,0,0,0.35);
             animation: fadeIn 0.5s ease-out;
         }
 
         .round-winner {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
 
         .winner-icon {
-            font-size: 4rem;
-            margin-bottom: 10px;
+            font-size: 5rem;
+            margin-bottom: 15px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        .winner-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 20px auto;
+            border: 5px solid #ff6b6b;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
         }
 
         .winner-name {
-            font-size: 2rem;
-            color: #667eea;
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #ff6b6b, #ffa500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             margin-bottom: 10px;
         }
 
         .winner-votes {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             color: #666;
+            margin-bottom: 10px;
+        }
+
+        .winner-description {
+            color: #888;
+            line-height: 1.6;
+            max-width: 500px;
+            margin: 0 auto 20px;
         }
 
         .next-round-btn {
             width: 100%;
-            padding: 15px;
-            margin-top: 20px;
+            padding: 18px;
+            margin-top: 25px;
             border: none;
-            border-radius: 10px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 15px;
+            background: linear-gradient(135deg, #ff6b6b, #ffa500);
             color: white;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .next-round-btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 15px 40px rgba(255, 107, 107, 0.4);
         }
 
         .history {
-            margin-top: 30px;
-            padding-top: 30px;
-            border-top: 2px solid #eee;
+            margin-top: 35px;
+            padding-top: 35px;
+            border-top: 3px solid #f0f0f0;
         }
 
         .history h3 {
             color: #333;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
         }
 
         .history-item {
-            padding: 10px;
-            background: rgba(102, 126, 234, 0.05);
-            border-radius: 10px;
-            margin-bottom: 10px;
+            padding: 15px;
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.05), rgba(255, 165, 0, 0.05));
+            border-radius: 15px;
+            margin-bottom: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            transition: all 0.3s;
+        }
+
+        .history-item:hover {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(255, 165, 0, 0.1));
+            transform: translateX(5px);
+        }
+
+        .history-animal {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .history-image {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
         }
 
         .history-round {
             font-weight: bold;
-            color: #667eea;
+            color: #ff6b6b;
+        }
+
+        .loading {
+            color: white;
+            font-size: 1.5rem;
+            text-align: center;
+            padding: 50px;
         }
 
         @media (max-width: 768px) {
@@ -301,20 +392,20 @@
             
             .cards-container {
                 flex-direction: column;
-                gap: 20px;
+                gap: 25px;
             }
             
-            .charity-card {
+            .animal-card {
                 width: 100%;
-                max-width: 350px;
+                max-width: 400px;
             }
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>🌟 Charity Champions</h1>
-        <p class="tagline">Every vote counts. Every 10 minutes, a new champion.</p>
+        <h1><span class="paw-icon">🐾</span> Best Friends Animal Sanctuary <span class="paw-icon">🐾</span></h1>
+        <p class="tagline">Vote for your favorite rescue animal • Every 10 minutes, a new winner!</p>
     </div>
 
     <div class="timer-container">
@@ -333,57 +424,193 @@
             <div class="round-winner">
                 <div class="winner-icon">🏆</div>
                 <h2>Round Winner!</h2>
+                <img class="winner-image" id="winner-image" src="" alt="">
                 <div class="winner-name" id="winner-name"></div>
                 <div class="winner-votes" id="winner-votes"></div>
+                <div class="winner-description" id="winner-description"></div>
             </div>
-            <button class="next-round-btn" onclick="startNewRound()">Start Next Round</button>
+            <button class="next-round-btn" onclick="startNewRound()">Start Next Round →</button>
             <div class="history" id="history">
-                <h3>Previous Winners</h3>
+                <h3>🏅 Previous Winners</h3>
             </div>
         </div>
     </div>
 
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
     <script>
-        // Charity data pool
-        const charityPool = [
-            { icon: "🏥", name: "Health for All", description: "Providing medical care to underserved communities worldwide" },
-            { icon: "📚", name: "Books Without Borders", description: "Building libraries and literacy programs in developing nations" },
-            { icon: "🌳", name: "Green Earth Initiative", description: "Planting trees and protecting forests for future generations" },
-            { icon: "🍽️", name: "Feed the Hungry", description: "Delivering nutritious meals to families facing food insecurity" },
-            { icon: "🏠", name: "Homes for Hope", description: "Building sustainable housing for homeless families" },
-            { icon: "💧", name: "Clean Water Project", description: "Bringing clean drinking water to remote villages" },
-            { icon: "🎓", name: "Education First", description: "Providing scholarships and school supplies to children in need" },
-            { icon: "🐾", name: "Animal Rescue Alliance", description: "Saving and rehabilitating abandoned and abused animals" },
-            { icon: "👶", name: "Children's Future Fund", description: "Supporting orphanages and child welfare programs globally" },
-            { icon: "🌊", name: "Ocean Guardians", description: "Protecting marine life and cleaning our oceans" },
-            { icon: "⚡", name: "Solar Villages", description: "Bringing renewable energy to off-grid communities" },
-            { icon: "🏥", name: "Mental Health Matters", description: "Providing free counseling and mental health support" }
+        // Firebase configuration - REPLACE WITH YOUR CONFIG
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            databaseURL: "YOUR_DATABASE_URL",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Animal data pool based on Best Friends animals
+        const animalPool = [
+            {
+                name: "Batman",
+                type: "Cat",
+                description: "A mysterious and charming feline who loves to patrol the sanctuary at night. Despite his tough name, he's incredibly gentle.",
+                image: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400&h=300&fit=crop"
+            },
+            {
+                name: "Blueberry",
+                type: "Rabbit",
+                description: "This adorable bunny got her name from her love of fresh berries. She's playful and loves to hop around in the grass.",
+                image: "https://images.unsplash.com/photo-1535241749838-299277b6305f?w=400&h=300&fit=crop"
+            },
+            {
+                name: "Brussels Sprout",
+                type: "Guinea Pig",
+                description: "Don't let the veggie name fool you - this little guy has a huge personality and loves cuddles more than anything.",
+                image: "https://images.unsplash.com/photo-1548767797-d8c844163c4c?w=400&h=300&fit=crop"
+            },
+            {
+                name: "Bryce",
+                type: "Dog",
+                description: "A loyal companion who came to the sanctuary after being found as a stray. He's learning to trust again and loves belly rubs.",
+                image: "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&h=300&fit=crop"
+            },
+            {
+                name: "Caboodle",
+                type: "Dog",
+                description: "Kit's brother who has a neurological condition but doesn't let it slow him down. Loves playing with friends and rolling in snow.",
+                image: "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=400&h=300&fit=crop"
+            },
+            {
+                name: "Cameo",
+                type: "Pig",
+                description: "A gentle, affectionate pig who loves mud baths and lazy afternoons. Found as a stray in 2013, now living her best life.",
+                image: "https://images.unsplash.com/photo-1516467508483-a7212febe31a?w=400&h=300&fit=crop"
+            },
+            {
+                name: "Captain",
+                type: "Dog",
+                description: "Leading his pack with courage and kindness. This brave pup overcame a difficult past and now helps other dogs feel safe.",
+                image: "https://images.unsplash.com/photo-1552053831-71594a27632d?w=400&h=300&fit=crop"
+            },
+            {
+                name: "Clancy",
+                type: "Cat",
+                description: "An Irish charmer with emerald eyes and a purr that could melt hearts. Loves sunny windowsills and head scratches.",
+                image: "https://images.unsplash.com/photo-1573865526739-10659fec78a5?w=400&h=300&fit=crop"
+            },
+            {
+                name: "Dean Martin",
+                type: "Dog",
+                description: "Smooth as his namesake, this crooner loves to 'sing' along when music plays. A true entertainer at heart.",
+                image: "https://images.unsplash.com/photo-1477884213360-7e9d7dcc1e48?w=400&h=300&fit=crop"
+            },
+            {
+                name: "Hudson",
+                type: "Cat",
+                description: "Has cerebellar hypoplasia but doesn't let it stop him. This special needs kitty is full of love and determination.",
+                image: "https://images.unsplash.com/photo-1519052537078-e6302a4968d4?w=400&h=300&fit=crop"
+            },
+            {
+                name: "Jelly Bean",
+                type: "Cat",
+                description: "A clever kitty with a mild neurological condition and deafness, but she's learned to navigate the world in her own special way.",
+                image: "https://images.unsplash.com/photo-1478098711619-5ab0b478d6e6?w=400&h=300&fit=crop"
+            },
+            {
+                name: "Jewel",
+                type: "Horse",
+                description: "A precious gem of the sanctuary, this gentle mare loves carrots and gentle brushing sessions with volunteers.",
+                image: "https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?w=400&h=300&fit=crop"
+            },
+            {
+                name: "Kit",
+                type: "Dog",
+                description: "Sweet as can be despite her neurological challenges. Loves playing with dog friends and has an incredible spirit.",
+                image: "https://images.unsplash.com/photo-1561037404-61cd46aa615b?w=400&h=300&fit=crop"
+            },
+            {
+                name: "Koda",
+                type: "Cat",
+                description: "Quirky and affectionate, loves perching on shoulders and zooming through cat tunnels. Not a fan of loud noises but loves hugs.",
+                image: "https://images.unsplash.com/photo-1511044568932-338cba0ad803?w=400&h=300&fit=crop"
+            },
+            {
+                name: "Reindeer",
+                type: "Cat",
+                description: "A former mom cat learning to trust people again. First at the door to say hello despite being fearful. Full-figured and fabulous.",
+                image: "https://images.unsplash.com/photo-1494256997604-768d1f608cac?w=400&h=300&fit=crop"
+            },
+            {
+                name: "Snickers",
+                type: "Horse",
+                description: "Sweet as the candy bar she's named after. This beautiful horse loves trail rides and making new human friends.",
+                image: "https://images.unsplash.com/photo-1534278931827-8a259344abe7?w=400&h=300&fit=crop"
+            },
+            {
+                name: "Tony",
+                type: "Horse",
+                description: "A gentle giant with a heart of gold. Tony loves apples and has become a favorite among sanctuary visitors.",
+                image: "https://images.unsplash.com/photo-1450052590821-8bf91254a353?w=400&h=300&fit=crop"
+            },
+            {
+                name: "Bossco",
+                type: "Dog",
+                description: "Has a collapsed trachea but doesn't let it dim his spirit. This brave little guy needs special care but gives endless love.",
+                image: "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=400&h=300&fit=crop"
+            }
         ];
 
-        let currentCharities = [];
+        let currentAnimals = [];
+        let usedAnimals = [];
         let votes = {};
         let timer = 600; // 10 minutes in seconds
         let timerInterval;
         let roundNumber = 1;
         let winners = [];
         let hasVoted = false;
+        let currentRoundRef = null;
 
-        function getRandomCharities() {
-            const shuffled = [...charityPool].sort(() => Math.random() - 0.5);
-            return shuffled.slice(0, 3);
+        function getRandomAnimals() {
+            // Reset used animals if we've gone through all
+            if (usedAnimals.length >= animalPool.length - 3) {
+                usedAnimals = [];
+            }
+
+            const available = animalPool.filter(animal => 
+                !usedAnimals.some(used => used.name === animal.name)
+            );
+
+            const shuffled = [...available].sort(() => Math.random() - 0.5);
+            const selected = shuffled.slice(0, 3);
+            
+            usedAnimals.push(...selected);
+            return selected;
         }
 
-        function createCharityCard(charity, index) {
+        function createAnimalCard(animal, index) {
             const card = document.createElement('div');
-            card.className = 'charity-card';
-            card.id = `charity-${index}`;
+            card.className = 'animal-card';
+            card.id = `animal-${index}`;
             
             card.innerHTML = `
-                <div class="charity-icon">${charity.icon}</div>
-                <div class="charity-name">${charity.name}</div>
-                <div class="charity-description">${charity.description}</div>
-                <div class="vote-count">Votes: <span id="votes-${index}">0</span></div>
-                <button class="vote-button" onclick="vote(${index})">Vote for this charity</button>
+                <img src="${animal.image}" alt="${animal.name}" class="animal-image">
+                <div class="animal-content">
+                    <span class="animal-type-badge">${animal.type}</span>
+                    <div class="animal-name">${animal.name}</div>
+                    <div class="animal-description">${animal.description}</div>
+                    <div class="vote-section">
+                        <div class="vote-count">Votes: <span id="votes-${index}">0</span></div>
+                        <button class="vote-button" onclick="vote(${index})">Vote for ${animal.name}</button>
+                    </div>
+                </div>
             `;
             
             return card;
@@ -396,13 +623,23 @@
             }
             
             votes[index] = (votes[index] || 0) + 1;
+            
+            // Update local display
             document.getElementById(`votes-${index}`).textContent = votes[index];
             
+            // Update Firebase
+            if (currentRoundRef) {
+                currentRoundRef.child('votes').child(index).set(votes[index]);
+                currentRoundRef.child('animals').child(index).update({
+                    voteCount: votes[index]
+                });
+            }
+            
             // Mark as voted
-            document.querySelectorAll('.charity-card').forEach(card => {
+            document.querySelectorAll('.animal-card').forEach(card => {
                 card.classList.remove('voted');
             });
-            document.getElementById(`charity-${index}`).classList.add('voted');
+            document.getElementById(`animal-${index}`).classList.add('voted');
             
             hasVoted = true;
         }
@@ -433,35 +670,55 @@
                 }
             }
             
-            const winner = currentCharities[winnerIndex];
-            winners.push({
-                round: roundNumber,
-                charity: winner,
-                votes: maxVotes
-            });
+            const winner = currentAnimals[winnerIndex];
+            winner.votes = maxVotes;
+            winner.round = roundNumber;
+            winners.push(winner);
+            
+            // Save winner to Firebase
+            if (currentRoundRef) {
+                currentRoundRef.update({
+                    winner: winner,
+                    endTime: Date.now(),
+                    status: 'completed'
+                });
+                
+                // Save to winners collection
+                database.ref('winners').push({
+                    ...winner,
+                    timestamp: Date.now()
+                });
+            }
             
             // Show results
+            showResults(winner);
+        }
+
+        function showResults(winner) {
             document.getElementById('voting-area').style.display = 'none';
             document.getElementById('results-area').style.display = 'block';
             
-            document.getElementById('winner-name').textContent = 
-                `${winner.icon} ${winner.name}`;
+            document.getElementById('winner-image').src = winner.image;
+            document.getElementById('winner-name').textContent = winner.name;
             document.getElementById('winner-votes').textContent = 
-                `${maxVotes} vote${maxVotes !== 1 ? 's' : ''}`;
+                `${winner.votes} vote${winner.votes !== 1 ? 's' : ''}`;
+            document.getElementById('winner-description').textContent = winner.description;
             
-            // Update history
             updateHistory();
         }
 
         function updateHistory() {
             const historyContainer = document.getElementById('history');
-            historyContainer.innerHTML = '<h3>Previous Winners</h3>';
+            historyContainer.innerHTML = '<h3>🏅 Previous Winners</h3>';
             
             winners.slice(-5).reverse().forEach(winner => {
                 const item = document.createElement('div');
                 item.className = 'history-item';
                 item.innerHTML = `
-                    <span>${winner.charity.icon} ${winner.charity.name}</span>
+                    <div class="history-animal">
+                        <img src="${winner.image}" alt="${winner.name}" class="history-image">
+                        <span>${winner.name} (${winner.type})</span>
+                    </div>
                     <span class="history-round">Round ${winner.round} - ${winner.votes} votes</span>
                 `;
                 historyContainer.appendChild(item);
@@ -474,8 +731,20 @@
             votes = {};
             timer = 600;
             
-            // Get new charities
-            currentCharities = getRandomCharities();
+            // Get new animals
+            currentAnimals = getRandomAnimals();
+            
+            // Create Firebase round
+            currentRoundRef = database.ref('rounds').push({
+                roundNumber: roundNumber,
+                startTime: Date.now(),
+                status: 'active',
+                animals: currentAnimals.map(animal => ({
+                    ...animal,
+                    voteCount: 0
+                })),
+                votes: {}
+            });
             
             // Reset display
             document.getElementById('voting-area').style.display = 'block';
@@ -484,8 +753,8 @@
             // Create new cards
             const container = document.getElementById('cards-container');
             container.innerHTML = '';
-            currentCharities.forEach((charity, index) => {
-                container.appendChild(createCharityCard(charity, index));
+            currentAnimals.forEach((animal, index) => {
+                container.appendChild(createAnimalCard(animal, index));
             });
             
             // Start timer
@@ -494,6 +763,12 @@
 
         // Initialize first round
         window.onload = function() {
+            // Check if Firebase is configured
+            if (firebaseConfig.apiKey === "YOUR_API_KEY") {
+                console.log("Please configure Firebase with your credentials!");
+                // Continue anyway for demo purposes
+            }
+            
             startNewRound();
         };
     </script>
