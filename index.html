@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Charity Voting Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .timer-container {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 50px;
+            padding: 15px 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            animation: fadeIn 1s ease-out 0.3s both;
+        }
+
+        .timer {
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .timer-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .cards-container {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+            perspective: 1000px;
+        }
+
+        .charity-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            width: 300px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: float 6s ease-in-out infinite;
+            transform-style: preserve-3d;
+        }
+
+        .charity-card:nth-child(1) {
+            animation-delay: 0s;
+            animation: float 6s ease-in-out infinite, fadeInUp 0.5s ease-out 0.1s both;
+        }
+
+        .charity-card:nth-child(2) {
+            animation-delay: 2s;
+            animation: float 6s ease-in-out infinite 2s, fadeInUp 0.5s ease-out 0.3s both;
+        }
+
+        .charity-card:nth-child(3) {
+            animation-delay: 4s;
+            animation: float 6s ease-in-out infinite 4s, fadeInUp 0.5s ease-out 0.5s both;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotateX(0) rotateY(0); }
+            25% { transform: translateY(-10px) rotateX(2deg) rotateY(-2deg); }
+            50% { transform: translateY(0) rotateX(0) rotateY(0); }
+            75% { transform: translateY(-5px) rotateX(-2deg) rotateY(2deg); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .charity-card:hover {
+            transform: translateY(-15px) scale(1.05);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+        }
+
+        .charity-card.voted {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transform: translateY(-20px) scale(1.08);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .charity-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: block;
+            text-align: center;
+        }
+
+        .charity-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .voted .charity-name {
+            color: white;
+        }
+
+        .charity-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .voted .charity-description {
+            color: rgba(255,255,255,0.9);
+        }
+
+        .vote-count {
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            color: #667eea;
+            transition: all 0.3s;
+        }
+
+        .voted .vote-count {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+
+        .vote-button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .vote-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .voted .vote-button {
+            background: white;
+            color: #667eea;
+        }
+
+        .results-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .round-winner {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .winner-icon {
+            font-size: 4rem;
+            margin-bottom: 10px;
+        }
+
+        .winner-name {
+            font-size: 2rem;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .winner-votes {
+            font-size: 1.2rem;
+            color: #666;
+        }
+
+        .next-round-btn {
+            width: 100%;
+            padding: 15px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .next-round-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .history {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid #eee;
+        }
+
+        .history h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .history-item {
+            padding: 10px;
+            background: rgba(102, 126, 234, 0.05);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .history-round {
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .cards-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .charity-card {
+                width: 100%;
+                max-width: 350px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🌟 Charity Champions</h1>
+        <p class="tagline">Every vote counts. Every 10 minutes, a new champion.</p>
+    </div>
+
+    <div class="timer-container">
+        <div class="timer">
+            <span class="timer-label">Next round in:</span>
+            <span id="timer">10:00</span>
+        </div>
+    </div>
+
+    <div id="voting-area">
+        <div class="cards-container" id="cards-container"></div>
+    </div>
+
+    <div id="results-area" style="display: none;">
+        <div class="results-container">
+            <div class="round-winner">
+                <div class="winner-icon">🏆</div>
+                <h2>Round Winner!</h2>
+                <div class="winner-name" id="winner-name"></div>
+                <div class="winner-votes" id="winner-votes"></div>
+            </div>
+            <button class="next-round-btn" onclick="startNewRound()">Start Next Round</button>
+            <div class="history" id="history">
+                <h3>Previous Winners</h3>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Charity data pool
+        const charityPool = [
+            { icon: "🏥", name: "Health for All", description: "Providing medical care to underserved communities worldwide" },
+            { icon: "📚", name: "Books Without Borders", description: "Building libraries and literacy programs in developing nations" },
+            { icon: "🌳", name: "Green Earth Initiative", description: "Planting trees and protecting forests for future generations" },
+            { icon: "🍽️", name: "Feed the Hungry", description: "Delivering nutritious meals to families facing food insecurity" },
+            { icon: "🏠", name: "Homes for Hope", description: "Building sustainable housing for homeless families" },
+            { icon: "💧", name: "Clean Water Project", description: "Bringing clean drinking water to remote villages" },
+            { icon: "🎓", name: "Education First", description: "Providing scholarships and school supplies to children in need" },
+            { icon: "🐾", name: "Animal Rescue Alliance", description: "Saving and rehabilitating abandoned and abused animals" },
+            { icon: "👶", name: "Children's Future Fund", description: "Supporting orphanages and child welfare programs globally" },
+            { icon: "🌊", name: "Ocean Guardians", description: "Protecting marine life and cleaning our oceans" },
+            { icon: "⚡", name: "Solar Villages", description: "Bringing renewable energy to off-grid communities" },
+            { icon: "🏥", name: "Mental Health Matters", description: "Providing free counseling and mental health support" }
+        ];
+
+        let currentCharities = [];
+        let votes = {};
+        let timer = 600; // 10 minutes in seconds
+        let timerInterval;
+        let roundNumber = 1;
+        let winners = [];
+        let hasVoted = false;
+
+        function getRandomCharities() {
+            const shuffled = [...charityPool].sort(() => Math.random() - 0.5);
+            return shuffled.slice(0, 3);
+        }
+
+        function createCharityCard(charity, index) {
+            const card = document.createElement('div');
+            card.className = 'charity-card';
+            card.id = `charity-${index}`;
+            
+            card.innerHTML = `
+                <div class="charity-icon">${charity.icon}</div>
+                <div class="charity-name">${charity.name}</div>
+                <div class="charity-description">${charity.description}</div>
+                <div class="vote-count">Votes: <span id="votes-${index}">0</span></div>
+                <button class="vote-button" onclick="vote(${index})">Vote for this charity</button>
+            `;
+            
+            return card;
+        }
+
+        function vote(index) {
+            if (hasVoted) {
+                alert("You've already voted in this round! Wait for the next round to vote again.");
+                return;
+            }
+            
+            votes[index] = (votes[index] || 0) + 1;
+            document.getElementById(`votes-${index}`).textContent = votes[index];
+            
+            // Mark as voted
+            document.querySelectorAll('.charity-card').forEach(card => {
+                card.classList.remove('voted');
+            });
+            document.getElementById(`charity-${index}`).classList.add('voted');
+            
+            hasVoted = true;
+        }
+
+        function updateTimer() {
+            const minutes = Math.floor(timer / 60);
+            const seconds = timer % 60;
+            document.getElementById('timer').textContent = 
+                `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (timer <= 0) {
+                endRound();
+            } else {
+                timer--;
+            }
+        }
+
+        function endRound() {
+            clearInterval(timerInterval);
+            
+            // Find winner
+            let maxVotes = 0;
+            let winnerIndex = 0;
+            for (let i in votes) {
+                if (votes[i] > maxVotes) {
+                    maxVotes = votes[i];
+                    winnerIndex = i;
+                }
+            }
+            
+            const winner = currentCharities[winnerIndex];
+            winners.push({
+                round: roundNumber,
+                charity: winner,
+                votes: maxVotes
+            });
+            
+            // Show results
+            document.getElementById('voting-area').style.display = 'none';
+            document.getElementById('results-area').style.display = 'block';
+            
+            document.getElementById('winner-name').textContent = 
+                `${winner.icon} ${winner.name}`;
+            document.getElementById('winner-votes').textContent = 
+                `${maxVotes} vote${maxVotes !== 1 ? 's' : ''}`;
+            
+            // Update history
+            updateHistory();
+        }
+
+        function updateHistory() {
+            const historyContainer = document.getElementById('history');
+            historyContainer.innerHTML = '<h3>Previous Winners</h3>';
+            
+            winners.slice(-5).reverse().forEach(winner => {
+                const item = document.createElement('div');
+                item.className = 'history-item';
+                item.innerHTML = `
+                    <span>${winner.charity.icon} ${winner.charity.name}</span>
+                    <span class="history-round">Round ${winner.round} - ${winner.votes} votes</span>
+                `;
+                historyContainer.appendChild(item);
+            });
+        }
+
+        function startNewRound() {
+            roundNumber++;
+            hasVoted = false;
+            votes = {};
+            timer = 600;
+            
+            // Get new charities
+            currentCharities = getRandomCharities();
+            
+            // Reset display
+            document.getElementById('voting-area').style.display = 'block';
+            document.getElementById('results-area').style.display = 'none';
+            
+            // Create new cards
+            const container = document.getElementById('cards-container');
+            container.innerHTML = '';
+            currentCharities.forEach((charity, index) => {
+                container.appendChild(createCharityCard(charity, index));
+            });
+            
+            // Start timer
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        // Initialize first round
+        window.onload = function() {
+            startNewRound();
+        };
+    </script>
+</body>
+</html>
